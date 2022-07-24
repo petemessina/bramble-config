@@ -1,0 +1,17 @@
+name: bramble-config
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  configure-bramble:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Ansible Playbook
+      run: ansible-playbook site.yml -i inventory/bramble-cluster/hosts.ini
