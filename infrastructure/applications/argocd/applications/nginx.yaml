@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-ingress
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: ingress-nginx
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: deploy/static/provider/baremetal
+    repoURL: 'https://github.com/kubernetes/ingress-nginx'
+    targetRevision: main
+  project: nginx-ingress
