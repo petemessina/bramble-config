@@ -54,14 +54,6 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 }
 
 ##############################################################
-# KUBERNETES CONFIG
-##############################################################
-resource "kubectl_manifest" "kubernetes_config" {
-  for_each            = data.kubectl_file_documents.kubernetes_config.manifests
-  yaml_body           = each.value
-}
-
-##############################################################
 # ARGOCD CONFIG
 ##############################################################
 resource "kubectl_manifest" "argocd_install" {
@@ -72,8 +64,7 @@ resource "kubectl_manifest" "argocd_install" {
   depends_on = [
     kubernetes_namespace.argocd_namespace,
     kubernetes_namespace.nginx_namespace,
-    kubernetes_namespace.argo_namespace,
-    kubectl_manifest.kubernetes_config
+    kubernetes_namespace.argo_namespace
   ]
 }
 
@@ -88,7 +79,7 @@ resource "kubectl_manifest" "nginx_project" {
 
 // Create nginx application
 resource "kubectl_manifest" "nginx_app" {
-  yaml_body = file("./applications/argocd/applicatoins/nginx.yaml")
+  yaml_body = file("./applications/argocd/applications/nginx.yaml")
 
   depends_on = [
     kubectl_manifest.nginx_project
@@ -106,7 +97,7 @@ resource "kubectl_manifest" "argo_workflow_project" {
 
 // Create argo workflow application
 resource "kubectl_manifest" "argo_workflow_app" {
-  yaml_body = file("./applications/argocd/applicatoins/argo-workflow.yaml")
+  yaml_body = file("./applications/argocd/applications/argo-workflow.yaml")
 
   depends_on = [
     kubectl_manifest.argo_workflow_project
