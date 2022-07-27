@@ -7,6 +7,10 @@ terraform {
       version = ">= 1.7.0"
     }
   }
+
+  backend "local" {
+    path = "/mnt/usb/tfstate/terraform.tfstate"
+  }
 }
 
 provider "kubectl" {
