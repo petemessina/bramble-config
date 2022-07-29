@@ -77,6 +77,15 @@ resource "helm_release" "traefik" {
   }
 }
 
+// Create argo workflow project
+resource "kubectl_manifest" "traefik_dashboard" {
+  yaml_body = file("./applications/traefik-dashboard/deploy.yaml")
+
+  depends_on = [
+    helm_release.traefik
+  ]
+}
+
 ##############################################################
 # ARGOCD CONFIG
 ##############################################################
