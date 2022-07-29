@@ -43,7 +43,7 @@ subjects:
   namespace: kube-system
 ---
 kind: Deployment
-apiVersion: extensions/v1
+apiVersion: extensions/v1beta1
 metadata:
   name: traefik-ingress
   namespace: kube-system
@@ -105,7 +105,7 @@ spec:
     port: 80
     targetPort: 8080
 ---
-apiVersion: extensions/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: traefik-web-ui
