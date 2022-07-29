@@ -26,16 +26,9 @@ data "kubectl_file_documents" "argocd_install_config" {
     content = file("./applications/argocd/deploy.yaml")
 }
 
-
 resource "kubernetes_namespace" "argocd_namespace" {
   metadata {
     name = "argocd"
-  }
-}
-
-resource "kubernetes_namespace" "nginx_namespace" {
-  metadata {
-    name = "ingress-nginx"
   }
 }
 
@@ -58,6 +51,13 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 }
 
 ##############################################################
+# TRAEFIK CONFIG
+##############################################################
+resource "kubectl_manifest" "argocd_install" {
+  yaml_body = file("./applications/traefik/deploy.yaml")
+}
+
+##############################################################
 # ARGOCD CONFIG
 ##############################################################
 resource "kubectl_manifest" "argocd_install" {
@@ -67,26 +67,7 @@ resource "kubectl_manifest" "argocd_install" {
 
   depends_on = [
     kubernetes_namespace.argocd_namespace,
-    kubernetes_namespace.nginx_namespace,
     kubernetes_namespace.argo_namespace
-  ]
-}
-
-// Create nginx project
-resource "kubectl_manifest" "nginx_project" {
-  yaml_body = file("./applications/argocd/projects/nginx.yaml")
-
-  depends_on = [
-    kubectl_manifest.argocd_install
-  ]
-}
-
-// Create nginx application
-resource "kubectl_manifest" "nginx_app" {
-  yaml_body = file("./applications/argocd/applications/nginx.yaml")
-
-  depends_on = [
-    kubectl_manifest.nginx_project
   ]
 }
 
