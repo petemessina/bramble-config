@@ -65,11 +65,11 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 ##############################################################
 # TRAEFIK CONFIG
 ##############################################################
-resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress-controller"
+resource "helm_release" "traefik" {
+  name       = "traefik"
 
   repository = "https://helm.traefik.io/traefik"
-  chart      = "traefik/traefik"
+  chart      = "traefik"
 }
 
 ##############################################################
