@@ -13,6 +13,12 @@ terraform {
   }
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
+
 provider "kubectl" {
   config_path       = "~/.kube/config"
   load_config_file  = true
@@ -22,10 +28,6 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-data "kubectl_file_documents" "traefik_install_config" {
-    content = file("./applications/traefik/deploy.yaml")
-}
-
 data "kubectl_file_documents" "argocd_install_config" {
     content = file("./applications/argocd/deploy.yaml")
 }
@@ -33,6 +35,12 @@ data "kubectl_file_documents" "argocd_install_config" {
 resource "kubernetes_namespace" "argocd_namespace" {
   metadata {
     name = "argocd"
+  }
+}
+
+resource "kubernetes_namespace" "traefik_namespace" {
+  metadata {
+    name = "traefik"
   }
 }
 
@@ -57,9 +65,11 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 ##############################################################
 # TRAEFIK CONFIG
 ##############################################################
-resource "kubectl_manifest" "traefik_install" {
-  for_each            = data.kubectl_file_documents.traefik_install_config.manifests
-  yaml_body           = each.value
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress-controller"
+
+  repository = "https://helm.traefik.io/traefik"
+  chart      = "traefik/traefik"
 }
 
 ##############################################################
