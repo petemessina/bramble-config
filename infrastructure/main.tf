@@ -53,7 +53,7 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 ##############################################################
 # TRAEFIK CONFIG
 ##############################################################
-resource "kubectl_manifest" "argocd_install" {
+resource "kubectl_manifest" "traefik_install" {
   yaml_body = file("./applications/traefik/deploy.yaml")
 }
 
