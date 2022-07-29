@@ -22,6 +22,10 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
+data "kubectl_file_documents" "traefik_install_config" {
+    content = file("./applications/traefik/deploy.yaml")
+}
+
 data "kubectl_file_documents" "argocd_install_config" {
     content = file("./applications/argocd/deploy.yaml")
 }
@@ -54,7 +58,8 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 # TRAEFIK CONFIG
 ##############################################################
 resource "kubectl_manifest" "traefik_install" {
-  yaml_body = file("./applications/traefik/deploy.yaml")
+  for_each            = data.kubectl_file_documents.traefik_install_config.manifests
+  yaml_body           = each.value
 }
 
 ##############################################################
