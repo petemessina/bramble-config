@@ -42,10 +42,17 @@ subjects:
   name: traefik-ingress
   namespace: kube-system
 ---
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traefik-ingress-controller
+  namespace: kube-system
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: traefik-ingress
+  name: traefik-ingress-controller
   namespace: kube-system
   labels:
     k8s-app: traefik-ingress-lb
@@ -60,10 +67,10 @@ spec:
         k8s-app: traefik-ingress-lb
         name: traefik-ingress-lb
     spec:
-      serviceAccountName: traefik-ingress
+      serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
       containers:
-      - image: traefik
+      - image: traefik:v1.7
         name: traefik-ingress-lb
         ports:
         - name: http
@@ -74,6 +81,23 @@ spec:
         - --api
         - --kubernetes
         - --logLevel=INFO
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-ingress-service
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+    - protocol: TCP
+      port: 80
+      name: web
+    - protocol: TCP
+      port: 8080
+      name: admin
+  type: NodePort
 ---
 kind: Service
 apiVersion: v1
