@@ -70,11 +70,15 @@ resource "helm_release" "traefik" {
 
   repository = "https://helm.traefik.io/traefik"
   chart      = "traefik"
+}
 
-  set {
-    name  = "namespace"
-    value = "traefik"
-  }
+// Traefik Ingress Routes
+resource "kubectl_manifest" "traefik_dashboard" {
+  yaml_body = file("./applications/traefik-dashboard/ingress-routes/argocd.yaml")
+
+  depends_on = [
+    helm_release.traefik
+  ]
 }
 
 // Create argo workflow project
