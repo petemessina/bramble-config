@@ -74,7 +74,7 @@ resource "helm_release" "traefik" {
 
 // Traefik Ingress Routes
 resource "kubectl_manifest" "traefik_argocd_route" {
-  yaml_body = file("./applications/traefik-dashboard/ingress-routes/argocd.yaml")
+  yaml_body = file("./applications/traefik-dashboard/ignress-routes/argocd.yaml")
 
   depends_on = [
     helm_release.traefik
