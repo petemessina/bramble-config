@@ -17,4 +17,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run Ansible Playbook
-      run: ansible-playbook site.yml -i inventory/bramble-cluster/hosts.ini
+      run: ansible-playbook site.yml -i inventory/bramble-cluster/hosts.ini -e "ansible_become_pass=${{ secrets.ANSIBLE_USER_PWD }}"
