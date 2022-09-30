@@ -85,16 +85,16 @@ resource "kubectl_manifest" "traefik_argocd_route" {
     helm_release.traefik,
     kubernetes_namespace.traefik_namespace
   ]
-}*/
+}
 
-// Create argo workflow project
+// Create traefik dashboard
 resource "kubectl_manifest" "traefik_dashboard" {
   yaml_body = file("./applications/traefik-dashboard/deploy.yaml")
 
   depends_on = [
     helm_release.traefik
   ]
-}
+}*/
 
 ##############################################################
 # ARGOCD CONFIG
