@@ -38,6 +38,12 @@ resource "kubernetes_namespace" "argocd_namespace" {
   }
 }
 
+resource "kubernetes_namespace" "traefik_namespace" {
+  metadata {
+    name = "traefik"
+  }
+}
+
 resource "kubernetes_namespace" "argo_namespace" {
   metadata {
     name = "argo"
@@ -64,6 +70,11 @@ resource "helm_release" "traefik" {
 
   repository = "https://helm.traefik.io/traefik"
   chart      = "traefik"
+  
+  set {
+    name  = "namespace"
+    value = "traefik"
+  }
 }
 
 // Traefik Ingress Routes
@@ -71,7 +82,8 @@ resource "kubectl_manifest" "traefik_argocd_route" {
   yaml_body = file("./applications/traefik-dashboard/ignress-routes/argocd.yaml")
 
   depends_on = [
-    helm_release.traefik
+    helm_release.traefik,
+    kubernetes_namespace.traefik_namespace
   ]
 }
 
