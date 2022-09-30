@@ -71,8 +71,7 @@ resource "kubectl_manifest" "traefik_argocd_route" {
   yaml_body = file("./applications/traefik-dashboard/ignress-routes/argocd.yaml")
 
   depends_on = [
-    helm_release.traefik,
-    kubernetes_namespace.traefik_namespace
+    helm_release.traefik
   ]
 }
 
