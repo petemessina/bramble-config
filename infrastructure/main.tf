@@ -75,14 +75,13 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
   depends_on = [
     kubernetes_namespace.traefik_namespace
   ]
-}
+}*/
 
 // Traefik Ingress Routes
 resource "kubectl_manifest" "traefik_argocd_route" {
   yaml_body = file("./applications/traefik-dashboard/ignress-routes/argocd.yaml")
 
   depends_on = [
-    helm_release.traefik,
     kubernetes_namespace.traefik_namespace
   ]
 }
@@ -90,11 +89,7 @@ resource "kubectl_manifest" "traefik_argocd_route" {
 // Create traefik dashboard
 resource "kubectl_manifest" "traefik_dashboard" {
   yaml_body = file("./applications/traefik-dashboard/deploy.yaml")
-
-  depends_on = [
-    helm_release.traefik
-  ]
-}*/
+}
 
 ##############################################################
 # ARGOCD CONFIG
