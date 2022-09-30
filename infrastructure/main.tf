@@ -70,11 +70,7 @@ resource "helm_release" "traefik" {
 
   repository = "https://helm.traefik.io/traefik"
   chart      = "traefik"
-  
-  set {
-    name  = "namespace"
-    value = "traefik"
-  }
+  namespace  = "traefik"
 }
 
 // Traefik Ingress Routes
