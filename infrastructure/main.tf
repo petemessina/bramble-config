@@ -70,7 +70,7 @@ resource "helm_release" "traefik" {
   name             = "traefik"
   repository       = "https://helm.traefik.io/traefik"
   chart            = "traefik"
-  version          = "v10.24.1"
+  version          = "v10.24.0"
   
   # If default_values == "" then apply default values from the chart if its anything else 
   # then apply values file using the values_file input variable
