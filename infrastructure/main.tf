@@ -38,12 +38,6 @@ resource "kubernetes_namespace" "argocd_namespace" {
   }
 }
 
-resource "kubernetes_namespace" "traefik_namespace" {
-  metadata {
-    name = "traefik"
-  }
-}
-
 resource "kubernetes_namespace" "argo_namespace" {
   metadata {
     name = "argo"
