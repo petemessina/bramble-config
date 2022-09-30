@@ -66,11 +66,23 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 # TRAEFIK CONFIG
 ##############################################################
 resource "helm_release" "traefik" {
-  name       = "traefik"
+  namespace        = "traefik"
+  name             = "traefik"
+  repository       = "https://helm.traefik.io/traefik"
+  chart            = "traefik"
 
-  repository = "https://helm.traefik.io/traefik"
-  chart      = "traefik"
-  namespace  = "traefik"
+  # If default_values == "" then apply default values from the chart if its anything else 
+  # then apply values file using the values_file input variable
+  values = [""]
+
+  set {
+    name = "deployment.replicas"
+    value = 1
+  }
+
+  depends_on = [
+    kubernetes_namespace.traefik_namespace
+  ]
 }
 
 // Traefik Ingress Routes
