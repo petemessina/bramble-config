@@ -65,7 +65,7 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 ##############################################################
 # TRAEFIK CONFIG
 ##############################################################
-resource "helm_release" "traefik" {
+/*resource "helm_release" "traefik" {
   namespace        = "traefik"
   name             = "traefik"
   repository       = "https://helm.traefik.io/traefik"
@@ -85,7 +85,7 @@ resource "kubectl_manifest" "traefik_argocd_route" {
     helm_release.traefik,
     kubernetes_namespace.traefik_namespace
   ]
-}
+}*/
 
 // Create argo workflow project
 resource "kubectl_manifest" "traefik_dashboard" {
