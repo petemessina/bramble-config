@@ -3546,6 +3546,7 @@ spec:
       - command:
         - argocd-server
         - --insecure
+        - --grpc-web
         env:
         - name: ARGOCD_SERVER_INSECURE
           valueFrom:
