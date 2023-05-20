@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana
+  name: prometheus
   namespace: argocd
 spec:
   project: root-cluster
   source:
-    path: prometheus
+    chart: kube-prometheus-stack
     repoURL: hhttps://prometheus-community.github.io/helm-charts
     targetRevision: HEAD
   destination: 
