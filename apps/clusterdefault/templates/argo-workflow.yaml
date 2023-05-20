@@ -13,3 +13,9 @@ spec:
     repoURL: 'https://github.com/argoproj/argo-workflows'
     targetRevision: master
   project: root-cluster
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
