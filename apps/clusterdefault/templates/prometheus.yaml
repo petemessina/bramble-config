@@ -12,7 +12,7 @@ spec:
     directory:
       recurse: true
   destination:
-    name: in-cluster
+    name: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
     syncOptions:
