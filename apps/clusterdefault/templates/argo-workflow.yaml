@@ -12,4 +12,4 @@ spec:
     path: manifests/quick-start/postgres
     repoURL: 'https://github.com/argoproj/argo-workflows'
     targetRevision: master
-  project: argo-workflow
+  project: root-cluster

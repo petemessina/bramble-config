@@ -11,5 +11,5 @@ spec:
   source:
     path: apps/clusterdefault
     repoURL: 'https://github.com/petemessina/bramble-config'
-    targetRevision: master
+    targetRevision: main
   project: root-cluster
