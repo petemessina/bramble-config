@@ -9,10 +9,8 @@ spec:
     chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 45.29.0
-    directory:
-      recurse: true
-  destination:
-    name: https://kubernetes.default.svc
+  destination: 
+    server: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
     syncOptions:
