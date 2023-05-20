@@ -9,13 +9,15 @@ spec:
     chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 45.29.0
+    helm:
+      skipCrds: true
+      values: |-
+        #Snip the values
+    chart: kube-prometheus-stack
   destination: 
     server: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
-      - Replace=true
     automated:
       prune: true
       selfHeal: true
