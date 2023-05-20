@@ -28,23 +28,19 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-data "kubectl_file_documents" "argocd_install_config" {
-    content = file("./applications/argocd/deploy.yaml")
-}
-
 resource "kubernetes_namespace" "argocd_namespace" {
   metadata {
     name = "argocd"
   }
 }
 
-resource "kubernetes_namespace" "argo_namespace" {
+/*resource "kubernetes_namespace" "argo_namespace" {
   metadata {
     name = "argo"
   }
 }
 
-/*resource "kubernetes_namespace" "traefik_namespace" {
+resource "kubernetes_namespace" "traefik_namespace" {
   metadata {
     name = "traefik"
   }
@@ -94,14 +90,15 @@ resource "kubectl_manifest" "traefik_dashboard" {
 ##############################################################
 # ARGOCD CONFIG
 ##############################################################
-resource "kubectl_manifest" "argocd_install" {
-  for_each            = data.kubectl_file_documents.argocd_install_config.manifests
-  yaml_body           = each.value
-  override_namespace  = "argocd"
+resource "helm_release" "argocd_install" {
+  namespace        = "argocd"
+  name             = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  timeout          = 800
 
   depends_on = [
-    kubernetes_namespace.argocd_namespace,
-    kubernetes_namespace.argo_namespace
+    kubernetes_namespace.argocd_namespace
   ]
 }
 
@@ -110,7 +107,7 @@ resource "kubectl_manifest" "argo_workflow_project" {
   yaml_body = file("./applications/argocd/projects/root-cluster.yaml")
 
   depends_on = [
-    kubectl_manifest.argocd_install
+    helm_release.argocd_install
   ]
 }
 
