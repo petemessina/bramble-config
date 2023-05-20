@@ -107,7 +107,7 @@ resource "kubectl_manifest" "argocd_install" {
 
 // Create argo workflow project
 resource "kubectl_manifest" "argo_workflow_project" {
-  yaml_body = file("./applications/argocd/projects/argo-workflow.yaml")
+  yaml_body = file("./applications/argocd/projects/root-cluster.yaml")
 
   depends_on = [
     kubectl_manifest.argocd_install
@@ -116,27 +116,9 @@ resource "kubectl_manifest" "argo_workflow_project" {
 
 // Create argo workflow application
 resource "kubectl_manifest" "argo_workflow_app" {
-  yaml_body = file("./applications/argocd/applications/argo-workflow.yaml")
+  yaml_body = file("./applications/argocd/applications/root-cluster.yaml")
 
   depends_on = [
     kubectl_manifest.argo_workflow_project
-  ]
-}
-
-// Create traefik project
-resource "kubectl_manifest" "traefik_project" {
-  yaml_body = file("./applications/argocd/projects/traefik.yaml")
-
-  depends_on = [
-    kubectl_manifest.argocd_install
-  ]
-}
-
-// Create traefik application
-resource "kubectl_manifest" "traefik_app" {
-  yaml_body = file("./applications/argocd/applications/traefik.yaml")
-
-  depends_on = [
-    kubectl_manifest.traefik_project
   ]
 }

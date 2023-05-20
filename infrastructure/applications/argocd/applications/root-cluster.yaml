@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-workflow
+  name: root-cluster
   namespace: argocd
 spec:
   destination:
@@ -12,4 +12,4 @@ spec:
     path: apps/clusterdefault
     repoURL: 'https://github.com/petemessina/bramble-config'
     targetRevision: master
-  project: argo-workflow
+  project: root-cluster
