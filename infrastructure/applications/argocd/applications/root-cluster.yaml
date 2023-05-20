@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflow
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: argo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: apps/clusterdefault
+    repoURL: 'https://github.com/petemessina/bramble-config'
+    targetRevision: master
+  project: argo-workflow

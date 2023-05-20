@@ -9,7 +9,7 @@ terraform {
   }
 
   backend "local" {
-    path = "/mnt/usb/tfstate/terraform.tfstate"
+    path = "terraform.tfstate"
   }
 }
 
@@ -38,15 +38,15 @@ resource "kubernetes_namespace" "argocd_namespace" {
   }
 }
 
-resource "kubernetes_namespace" "traefik_namespace" {
-  metadata {
-    name = "traefik"
-  }
-}
-
 resource "kubernetes_namespace" "argo_namespace" {
   metadata {
     name = "argo"
+  }
+}
+
+/*resource "kubernetes_namespace" "traefik_namespace" {
+  metadata {
+    name = "traefik"
   }
 }
 
@@ -65,7 +65,7 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
 ##############################################################
 # TRAEFIK CONFIG
 ##############################################################
-/*resource "helm_release" "traefik" {
+resource "helm_release" "traefik" {
   namespace        = "traefik"
   name             = "traefik"
   repository       = "https://helm.traefik.io/traefik"
@@ -75,7 +75,7 @@ resource "kubernetes_namespace" "gardenmonitor_namespace" {
   depends_on = [
     kubernetes_namespace.traefik_namespace
   ]
-}*/
+}
 
 // Traefik Ingress Routes
 resource "kubectl_manifest" "traefik_argocd_route" {
@@ -89,7 +89,7 @@ resource "kubectl_manifest" "traefik_argocd_route" {
 // Create traefik dashboard
 resource "kubectl_manifest" "traefik_dashboard" {
   yaml_body = file("./applications/traefik-dashboard/deploy.yaml")
-}
+}*/
 
 ##############################################################
 # ARGOCD CONFIG
@@ -120,5 +120,23 @@ resource "kubectl_manifest" "argo_workflow_app" {
 
   depends_on = [
     kubectl_manifest.argo_workflow_project
+  ]
+}
+
+// Create traefik project
+resource "kubectl_manifest" "traefik_project" {
+  yaml_body = file("./applications/argocd/projects/traefik.yaml")
+
+  depends_on = [
+    kubectl_manifest.argocd_install
+  ]
+}
+
+// Create traefik application
+resource "kubectl_manifest" "traefik_app" {
+  yaml_body = file("./applications/argocd/applications/traefik.yaml")
+
+  depends_on = [
+    kubectl_manifest.traefik_project
   ]
 }
