@@ -9,8 +9,8 @@ spec:
     namespace: argo
     server: 'https://kubernetes.default.svc'
   source:
-    path: manifests/quick-start/postgres
-    repoURL: 'https://github.com/argoproj/argo-workflows'
+    path: argo-workflows
+    repoURL: 'https://argoproj.github.io/argo-helm'
     targetRevision: master
   project: root-cluster
   syncPolicy:
