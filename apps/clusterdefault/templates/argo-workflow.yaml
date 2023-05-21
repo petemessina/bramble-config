@@ -11,7 +11,7 @@ spec:
   source:
     path: argo-workflows
     repoURL: 'https://argoproj.github.io/argo-helm'
-    targetRevision: master
+    targetRevision: argo-workflows-0.28.0
   project: root-cluster
   syncPolicy:
     syncOptions:
