@@ -54,8 +54,8 @@ resource "helm_release" "argocd_install" {
   ]
 }
 
-// Create argo workflow project
-resource "kubectl_manifest" "argo_workflow_project" {
+// Create root-cluster project
+resource "kubectl_manifest" "root_cluster_project" {
   yaml_body = file("./applications/argocd/projects/root-cluster.yaml")
 
   depends_on = [
@@ -63,11 +63,29 @@ resource "kubectl_manifest" "argo_workflow_project" {
   ]
 }
 
-// Create argo workflow application
-resource "kubectl_manifest" "argo_workflow_app" {
+// Create aroot-cluster application
+resource "kubectl_manifest" "root_cluster_application" {
   yaml_body = file("./applications/argocd/applications/root-cluster.yaml")
 
   depends_on = [
-    kubectl_manifest.argo_workflow_project
+    kubectl_manifest.root_cluster
+  ]
+}
+
+// Create argo workflow project
+resource "kubectl_manifest" "garden_monitor_project" {
+  yaml_body = file("./applications/argocd/projects/garden-monitor.yaml")
+
+  depends_on = [
+    helm_release.argocd_install
+  ]
+}
+
+// Create argo workflow application
+resource "kubectl_manifest" "garden_monitor_application" {
+  yaml_body = file("./applications/argocd/applications/garden-monitor.yaml")
+
+  depends_on = [
+    kubectl_manifest.garden_monitor_project
   ]
 }

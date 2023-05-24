@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: garden-monitor
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: garden-monitor-api
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: apps/garden-monitor
+    repoURL: 'https://github.com/petemessina/bramble-config'
+    targetRevision: main
+  project: garden-monitor
