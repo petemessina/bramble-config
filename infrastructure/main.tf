@@ -34,59 +34,6 @@ resource "kubernetes_namespace" "argocd_namespace" {
   }
 }
 
-/*resource "kubernetes_namespace" "argo_namespace" {
-  metadata {
-    name = "argo"
-  }
-}
-
-resource "kubernetes_namespace" "traefik_namespace" {
-  metadata {
-    name = "traefik"
-  }
-}
-
-resource "kubernetes_namespace" "kubegres_system_namespace" {
-  metadata {
-    name = "kubegres-system"
-  }
-}
-
-resource "kubernetes_namespace" "gardenmonitor_namespace" {
-  metadata {
-    name = "gardenmonitor"
-  }
-}
-
-##############################################################
-# TRAEFIK CONFIG
-##############################################################
-resource "helm_release" "traefik" {
-  namespace        = "traefik"
-  name             = "traefik"
-  repository       = "https://helm.traefik.io/traefik"
-  chart            = "traefik"
-  timeout          = 800
-
-  depends_on = [
-    kubernetes_namespace.traefik_namespace
-  ]
-}
-
-// Traefik Ingress Routes
-resource "kubectl_manifest" "traefik_argocd_route" {
-  yaml_body = file("./applications/traefik-dashboard/ignress-routes/argocd.yaml")
-
-  depends_on = [
-    kubernetes_namespace.traefik_namespace
-  ]
-}
-
-// Create traefik dashboard
-resource "kubectl_manifest" "traefik_dashboard" {
-  yaml_body = file("./applications/traefik-dashboard/deploy.yaml")
-}*/
-
 ##############################################################
 # ARGOCD CONFIG
 ##############################################################
