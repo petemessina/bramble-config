@@ -97,6 +97,11 @@ resource "helm_release" "argocd_install" {
   chart            = "argo-cd"
   timeout          = 800
 
+  set {
+    name  = "configs.params.server\\.insecure"
+    value = true
+  }
+
   depends_on = [
     kubernetes_namespace.argocd_namespace
   ]
