@@ -63,16 +63,16 @@ resource "kubectl_manifest" "root_cluster_project" {
   ]
 }
 
-// Create aroot-cluster application
+// Create root-cluster application
 resource "kubectl_manifest" "root_cluster_application" {
   yaml_body = file("./applications/argocd/applications/root-cluster.yaml")
 
   depends_on = [
-    kubectl_manifest.root_cluster
+    kubectl_manifest.root_cluster_project
   ]
 }
 
-// Create argo workflow project
+// Create garden monitor project
 resource "kubectl_manifest" "garden_monitor_project" {
   yaml_body = file("./applications/argocd/projects/garden-monitor.yaml")
 
@@ -81,7 +81,7 @@ resource "kubectl_manifest" "garden_monitor_project" {
   ]
 }
 
-// Create argo workflow application
+// Create garden monitor application
 resource "kubectl_manifest" "garden_monitor_application" {
   yaml_body = file("./applications/argocd/applications/garden-monitor.yaml")
 
