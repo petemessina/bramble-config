@@ -12,6 +12,10 @@ spec:
     chart: argo-workflows
     repoURL: https://argoproj.github.io/argo-helm
     targetRevision: 0.28.0
+    helm:
+      parameters:
+      - name: "server.extraArgs[0]="
+        value: "--auth-mode=server"
   project: root-cluster
   syncPolicy:
     syncOptions:
