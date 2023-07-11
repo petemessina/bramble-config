@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jarvis-dashboard
+  namespace: application
+  labels:
+    app: jarvis-dashboard
+spec:
+  containers:
+    - name: jarvis-dashboard
+      image: gardenmonitor.azurecr.io/jarvis-dashboard:0.0.1
+      imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+    - name: registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jarvis-dashboard-service
+  namespace: application
+spec:
+  selector:
+    app: jarvis-dashboard
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jarvis-dashboard-ingress
+  namespace: application
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`jarvis.master-node.com`)
+      kind: Rule
+      services:
+        - name: jarvis-dashboard-service
+          port: 3000
