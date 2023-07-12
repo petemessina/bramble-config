@@ -18,6 +18,7 @@ spec:
         value: "--auth-mode=server"
   project: root-cluster
   syncPolicy:
+    automated: {}
     syncOptions:
       - CreateNamespace=true
     automated:
