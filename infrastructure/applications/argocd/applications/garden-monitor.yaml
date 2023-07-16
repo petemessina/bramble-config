@@ -13,3 +13,6 @@ spec:
     repoURL: 'https://github.com/petemessina/bramble-config'
     targetRevision: main
   project: garden-monitor
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
