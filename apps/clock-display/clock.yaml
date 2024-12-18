@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: clock-api
+  namespace: application
+  labels:
+    app: clock-api
+spec:
+  containers:
+    - name: clock-api
+      image: gardenmonitor.azurecr.io/clock-data:003
+      imagePullPolicy: Always
+  imagePullSecrets:
+    - name: registry-secret
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: clock-ui
+  namespace: application
+  labels:
+    app: clock-ui
+spec:
+  containers:
+    - name: clock-ui
+      image: gardenmonitor.azurecr.io/clock-ui:004
+      imagePullPolicy: Always
+  imagePullSecrets:
+    - name: registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clock-api-service
+  namespace: application
+spec:
+  selector:
+    app: clock-api
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clock-ui-service
+  namespace: application
+spec:
+  selector:
+    app: clock-ui
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: clock-api-ingress
+  namespace: application
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`clock-api.master-node.com`)
+      kind: Rule
+      services:
+        - name: clock-api-service
+          port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: clock-ui-ingress
+  namespace: application
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`clock-ui.master-node.com`)
+      kind: Rule
+      services:
+        - name: clock-ui-service
+          port: 3000

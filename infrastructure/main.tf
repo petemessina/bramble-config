@@ -28,39 +28,39 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-resource "kubernetes_namespace" "argocd_namespace" {
-  metadata {
-    name = "argocd"
-  }
-}
+#resource "kubernetes_namespace" "argocd_namespace" {
+#  metadata {
+#    name = "argocd"
+#  }
+#}
 
 ##############################################################
 # ARGOCD CONFIG
 ##############################################################
-resource "helm_release" "argocd_install" {
-  namespace        = "argocd"
-  name             = "argocd"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  timeout          = 800
+#resource "helm_release" "argocd_install" {
+#  namespace        = "argocd"
+#  name             = "argocd"
+#  repository       = "https://argoproj.github.io/argo-helm"
+#  chart            = "argo-cd"
+#  timeout          = 800
 
-  set {
-    name  = "configs.params.server\\.insecure"
-    value = true
-  }
+#  set {
+#    name  = "configs.params.server\\.insecure"
+#    value = true
+#  }
 
-  depends_on = [
-    kubernetes_namespace.argocd_namespace
-  ]
-}
+#  depends_on = [
+#    kubernetes_namespace.argocd_namespace
+#  ]
+#}
 
 // Create root-cluster project
 resource "kubectl_manifest" "root_cluster_project" {
   yaml_body = file("./applications/argocd/projects/root-cluster.yaml")
 
-  depends_on = [
-    helm_release.argocd_install
-  ]
+#  depends_on = [
+#    helm_release.argocd_install
+#  ]
 }
 
 // Create root-cluster application
@@ -84,6 +84,24 @@ resource "kubectl_manifest" "garden_monitor_project" {
 // Create garden monitor application
 resource "kubectl_manifest" "garden_monitor_application" {
   yaml_body = file("./applications/argocd/applications/garden-monitor.yaml")
+
+  depends_on = [
+    kubectl_manifest.garden_monitor_project
+  ]
+}
+
+// Create clock project
+resource "kubectl_manifest" "garden_monitor_project" {
+  yaml_body = file("./applications/argocd/projects/clock-display.yaml")
+
+  depends_on = [
+    helm_release.argocd_install
+  ]
+}
+
+// Create clock application
+resource "kubectl_manifest" "garden_monitor_application" {
+  yaml_body = file("./applications/argocd/applications/clock-display.yaml")
 
   depends_on = [
     kubectl_manifest.garden_monitor_project
